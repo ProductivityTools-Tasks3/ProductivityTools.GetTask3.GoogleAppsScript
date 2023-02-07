@@ -3,7 +3,7 @@ function onOpen() {
   menu.addItem("Parse email","parseEmail").addToUi();
   menu.addItem("LoadThreadsToSheet","loadThreadsToSheet").addToUi();
   menu.addItem("ArchiveMarkedThreads","archiveMarkedThreads").addToUi();
-
+ menu.addItem("show user property","getUserProperty").addToUi(); 
 }
 
 function parseEmail() {
@@ -68,4 +68,11 @@ function archive(id){
       var thread=GmailApp.getThreadById(id)
       Logger.log(thread);
       thread.moveToArchive()
+}
+
+function getUserProperty()
+{
+  var properties=PropertiesService.getScriptProperties();
+  
+  SpreadsheetApp.getUi().alert(properties.getProperty("password"));
 }
