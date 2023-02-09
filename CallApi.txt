@@ -1,0 +1,60 @@
+function createTagsFromSubject() {
+ CallApi();
+ return
+
+  var taskLists=Tasks.Tasklists.list();
+  var taslkList=taskLists.items[0]
+  var tasks=Tasks.Tasks.list(taslkList.id)
+  for(var i=0;i<tasks.items.length;i++){
+    var task=tasks.items[i]
+    var title=task.title;
+    var link=task.links[0].link;
+    var notes=task.notes;
+    Logger.log(title);
+    Logger.log(link);
+    Logger.log(notes);
+   // DeleteTask(taslkList.id,task.id)
+  }
+}
+
+function DeleteTask(taskListId, taskId)
+{
+  Tasks.Tasks.remove(taskListId,taskId)
+}
+
+function CallApi()
+{
+  var customToken=GetCustomToken();
+  GetIdToken(customToken)
+}
+
+function GetCustomToken()
+{
+  var url = 'https://apigettask3.productivitytools.top:8040/api/CustomToken/Get'
+
+  var response = UrlFetchApp.fetch(url);
+  var customToken=response.getContentText();
+  Logger.log(customToken);
+  return customToken;
+  Logger.log(response);
+}
+
+function GetIdToken(customToken)
+{
+  Logger.log("Hello GetIdToken")
+  var webApiKey='0'
+  var url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key='+webApiKey;
+
+  var data = {
+  'token': customToken,
+  'returnSecureToken': true,
+  };
+  var options = {
+    'method' : 'post',
+    'contentType': 'application/json',
+    // Convert the JavaScript object to a JSON string.
+    'payload' : JSON.stringify(data)
+  };
+  var r=UrlFetchApp.fetch(url, options);
+  var x=r.getContentText();
+}
