@@ -42,7 +42,7 @@ function GetCustomToken()
 function GetIdToken(customToken)
 {
   Logger.log("Hello GetIdToken")
-  var webApiKey='0'
+  var webApiKey=PropertiesService.getScriptProperties().getProperty("webapikey");
   var url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key='+webApiKey;
 
   var data = {
@@ -55,6 +55,7 @@ function GetIdToken(customToken)
     // Convert the JavaScript object to a JSON string.
     'payload' : JSON.stringify(data)
   };
-  var r=UrlFetchApp.fetch(url, options);
-  var x=r.getContentText();
+  var response=UrlFetchApp.fetch(url, options);
+  var idKeyObject=response.getContentText()
+  var idKey=JSON.parse(idKeyObject).idToken
 }
