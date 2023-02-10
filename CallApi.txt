@@ -25,7 +25,37 @@ function DeleteTask(taskListId, taskId)
 function CallApi()
 {
   var customToken=GetCustomToken();
-  GetIdToken(customToken)
+  var idKey=GetIdToken(customToken)
+  CreateTask(idKey)
+}
+
+function CreateTask(idKey)
+{
+  Logger.log(idKey);
+  var url='https://apigettask3.productivitytools.top:8040/api/Task/Add'
+
+  var bearer="Bearer "+idKey;
+  var data = {"ParentId":46293,
+    "Name":"xxxfsdafa",
+    "Details":"hhh",
+    "DetailsType":"",
+    "Finished":false
+  }
+  //var data2={"elementId":null,"path":null}
+  var options = {
+    'method' : 'post',
+    'contentType': 'application/json',
+    'headers':{
+      'authorization':bearer
+     },
+    'payload' : JSON.stringify(data)
+  };
+  Logger.log(url);
+  Logger.log(options);
+
+  var response=UrlFetchApp.fetch(url, options);
+  var responseText=response.getContentText()
+  Logger.log(responseText);
 }
 
 function GetCustomToken()
@@ -58,4 +88,5 @@ function GetIdToken(customToken)
   var response=UrlFetchApp.fetch(url, options);
   var idKeyObject=response.getContentText()
   var idKey=JSON.parse(idKeyObject).idToken
+  return idKey
 }
