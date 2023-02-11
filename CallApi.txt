@@ -1,19 +1,28 @@
 function createTagsFromSubject() {
- CallApi();
- return
-
+ 
   var taskLists=Tasks.Tasklists.list();
   var taslkList=taskLists.items[0]
   var tasks=Tasks.Tasks.list(taslkList.id)
   for(var i=0;i<tasks.items.length;i++){
     var task=tasks.items[i]
-    var title=task.title;
-    var link=task.links[0].link;
-    var notes=task.notes;
-    Logger.log(title);
-    Logger.log(link);
-    Logger.log(notes);
-   // DeleteTask(taslkList.id,task.id)
+    var taskName=task.title;
+    var taskNotes=task.notes;
+  
+    Logger.log(taskName);
+    Logger.log(taskNotes);
+    if (task.links.length>0)
+    {
+      var emailLink=task.links[0].link;
+      Logger.log(emailLink);
+    }
+   
+   
+    var createdId=CallApi(taskName,taskNotes,emailLink);
+    if (createdId!=null)
+    {
+      DeleteTask(taslkList.id,task.id)
+    }
+    return;
   }
 }
 
@@ -22,26 +31,43 @@ function DeleteTask(taskListId, taskId)
   Tasks.Tasks.remove(taskListId,taskId)
 }
 
-function CallApi()
+function CallApi(taskName,taskNotes,emailLink)
 {
   var customToken=GetCustomToken();
   var idKey=GetIdToken(customToken)
-  CreateTask(idKey)
+  var createdId=CreateTask(idKey,taskName,taskNotes,emailLink)
+  return createdId;
 }
 
-function CreateTask(idKey)
+function CreateTask(idKey, taskName, taskNotes, emailLink)
 {
   Logger.log(idKey);
+  if(taskNotes!=null && emailLink!=null)
+  {
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":"'+taskNotes+'"}]},{"type":"paragraph","children":[{"text":""},{"type":"link","href":"'+emailLink+'","children":[{"text":"mail"}]},{"text":""}]}]'
+  } 
+  if(taskNotes!=null && emailLink==null)
+  {
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":"'+taskNotes+'"}]}]'
+  } 
+  if (taskNotes==null && emailLink!=null)
+  {
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":""},{"type":"link","href":"'+emailLink+'","children":[{"text":"email"}]},{"text":""}]}]'
+  }
+  if (taskNotes==null && emailLink==null)
+  {
+   var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":""}]}]'
+  }
+
   var url='https://apigettask3.productivitytools.top:8040/api/Task/Add'
 
   var bearer="Bearer "+idKey;
   var data = {"ParentId":46293,
-    "Name":"xxxfsdafa",
-    "Details":"hhh",
-    "DetailsType":"",
+    "Name":taskName,
+    "Details":details,
+    "DetailsType":"Slate",
     "Finished":false
   }
-  //var data2={"elementId":null,"path":null}
   var options = {
     'method' : 'post',
     'contentType': 'application/json',
@@ -50,12 +76,14 @@ function CreateTask(idKey)
      },
     'payload' : JSON.stringify(data)
   };
+
   Logger.log(url);
   Logger.log(options);
 
   var response=UrlFetchApp.fetch(url, options);
   var responseText=response.getContentText()
   Logger.log(responseText);
+  return responseText;
 }
 
 function GetCustomToken()
