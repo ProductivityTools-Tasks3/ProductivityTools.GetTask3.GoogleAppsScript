@@ -16,7 +16,7 @@ This is Google Apps Script which reads tasks from Google Tasks and move them to 
 <!--more-->
 
 ## Script properties
-Script need to have two script properties:
+Script needs to have two script properties:
 
 - ParentId - which defines where new tasks will be created
 - webapikey - used for authentication
@@ -31,6 +31,6 @@ To make the process automatic, trigger need to be added:
 
  ## Services
 
- Task service need to be added to be able to call API.
+ Task service needs to be added to be able to call API.
 
  ![](Images/2023-02-12-20-09-20.png)
