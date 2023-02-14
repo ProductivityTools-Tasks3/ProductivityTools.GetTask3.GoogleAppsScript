@@ -31,6 +31,6 @@ To make the process automatic, trigger need to be added:
 
  ## Services
 
- Task service need to be added to be able to call API
+ Task service need to be added to be able to call API.
 
  ![](Images/2023-02-12-20-09-20.png)
