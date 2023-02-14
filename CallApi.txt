@@ -1,5 +1,4 @@
-function createTagsFromSubject() {
- 
+function createGT3TasksFromGoogleTasks() {
   var taskLists=Tasks.Tasklists.list();
   var taslkList=taskLists.items[0]
   var tasks=Tasks.Tasks.list(taslkList.id)
@@ -10,19 +9,24 @@ function createTagsFromSubject() {
   
     Logger.log(taskName);
     Logger.log(taskNotes);
+
+
+    if (taskName==undefined || taskName=="")
+    {
+      continue;
+    }
+
     if (task.links.length>0)
     {
       var emailLink=task.links[0].link;
       Logger.log(emailLink);
     }
    
-   
     var createdId=CallApi(taskName,taskNotes,emailLink);
     if (createdId!=null)
     {
       DeleteTask(taslkList.id,task.id)
     }
-    return;
   }
 }
 
@@ -61,8 +65,9 @@ function CreateTask(idKey, taskName, taskNotes, emailLink)
 
   var url='https://apigettask3.productivitytools.top:8040/api/Task/Add'
 
+  var parentId=PropertiesService.getScriptProperties().getProperty("ParentId");
   var bearer="Bearer "+idKey;
-  var data = {"ParentId":46293,
+  var data = {"ParentId":parentId,
     "Name":taskName,
     "Details":details,
     "DetailsType":"Slate",
@@ -88,7 +93,7 @@ function CreateTask(idKey, taskName, taskNotes, emailLink)
 
 function GetCustomToken()
 {
-  var url = 'https://apigettask3.productivitytools.top:8040/api/CustomToken/Get'
+  var url = 'https://apigettask3.productivitytools.top:8040/api/CustomToken/GetGAS'
 
   var response = UrlFetchApp.fetch(url);
   var customToken=response.getContentText();
