@@ -9,7 +9,7 @@
     </a>
 </p>
 
-# ProductivityTools.GetTask3.GoogleAppsScript
+# GetTask3 - GoogleAppsScript
 
 This is Google Apps Script which reads tasks from Google Tasks and move them to GetTask3 application.
 
