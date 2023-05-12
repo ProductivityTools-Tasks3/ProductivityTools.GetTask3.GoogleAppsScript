@@ -1,7 +1,12 @@
+function doGet(){
+  var result=createGT3TasksFromGoogleTasks();
+  return ContentService.createTextOutput(result);
+}
 function createGT3TasksFromGoogleTasks() {
   var taskLists=Tasks.Tasklists.list();
   var taslkList=taskLists.items[0]
   var tasks=Tasks.Tasks.list(taslkList.id)
+  var result="Result:";
   for(var i=0;i<tasks.items.length;i++){
     var task=tasks.items[i]
     var taskName=task.title;
@@ -13,7 +18,9 @@ function createGT3TasksFromGoogleTasks() {
 
     if (taskName==undefined || taskName=="")
     {
-       DeleteTask(taslkList.id,task.id);
+      result+="Deleted"+ task.title +'\n\r';
+      DeleteTask(taslkList.id,task.id);
+      continue;
     }
 
     if (task.links.length>0)
@@ -23,11 +30,13 @@ function createGT3TasksFromGoogleTasks() {
     }
    
     var createdId=CallApi(taskName,taskNotes,emailLink);
+    result+="Created"+ task.title + '\n\r';
     if (createdId!=null)
     {
       DeleteTask(taslkList.id,task.id)
     }
   }
+  return result;
 }
 
 function DeleteTask(taskListId, taskId)
