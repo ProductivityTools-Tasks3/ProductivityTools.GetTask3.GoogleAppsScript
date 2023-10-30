@@ -57,19 +57,19 @@ function CreateTask(idKey, taskName, taskNotes, emailLink)
   Logger.log(idKey);
   if(taskNotes!=null && emailLink!=null)
   {
-    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":"'+taskNotes+'"}]},{"type":"paragraph","children":[{"text":""},{"type":"link","href":"'+emailLink+'","children":[{"text":"mail"}]},{"text":""}]}]'
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"p","children":[{"text":"'+taskNotes+'"}]},{"type":"p","children":[{"text":""},{"type":"a","url":"'+emailLink+'","children":[{"text":"mail"}]},{"text":""}]}]'
   } 
   if(taskNotes!=null && emailLink==null)
   {
-    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":"'+taskNotes+'"}]}]'
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"p","children":[{"text":"'+taskNotes+'"}]}]'
   } 
   if (taskNotes==null && emailLink!=null)
   {
-    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":""},{"type":"link","href":"'+emailLink+'","children":[{"text":"email"}]},{"text":""}]}]'
+    var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"p","children":[{"text":""},{"type":"a","url":"'+emailLink+'","children":[{"text":"email"}]},{"text":""}]}]'
   }
   if (taskNotes==null && emailLink==null)
   {
-   var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"paragraph","children":[{"text":""}]}]'
+   var details='[{"type":"title","children":[{"text":"'+taskName+'"}]},{"type":"p","children":[{"text":""}]}]'
   }
 
   var url='https://apigettask3.productivitytools.top:8040/api/Task/Add'
